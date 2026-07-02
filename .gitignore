@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Mesh files written by gen_mesh_*.m at run time
+vertex_coordinates.txt
+elem_vertices.txt
+dirichlet.txt
+neumann.txt
+
+# Python
+__pycache__/
+*.pyc
