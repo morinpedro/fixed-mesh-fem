@@ -23,15 +23,15 @@ coef_c = 0.0;
 
 
 % right-hand side function f
-%fc_f = inline('sin(pi*x(1))*sin(pi*x(2))','x');
-%fc_f = inline('2*(x(1)>0.5)','x');
-fc_f = inline('20*exp(-10*norm(x)^2)*(2-20*norm(x)^2)', 'x');
+%fc_f = @(x) sin(pi*x(1))*sin(pi*x(2));
+%fc_f = @(x) 2*(x(1)>0.5)','x';
+fc_f = @(x) 20*exp(-10*norm(x)^2)*(2-20*norm(x)^2);
 
 % Dirichlet data, function g_D
-fc_gD = inline('exp(-10*norm(x)^2)','x'); 
+fc_gD = @(x) exp(-10*norm(x)^2);
 
 % Neumann data, function g_N
-fc_gN = inline('0', 'x');
+fc_gN = @(x) 0;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,7 +61,6 @@ if (exist('neumann.txt')==2)
 else
     neumann = [];
 end
-
 % end of mesh input
 
 
@@ -74,7 +73,9 @@ fh = zeros(n_vertices, 1);
 
 % gradients of the basis functions in the reference element
 grd_bas_fcts = [ -1 -1 ; 1 0 ; 0 1 ]' ;
-    
+% mass matrix in the reference element
+Mhat = [2 1 1; 1 2 1; 1 1 2]/12;
+
 % We loop over the elements of the mesh,
 % and add the contributions of each element to the matrix A
 % and the right-hand side fh
@@ -87,9 +88,9 @@ grd_bas_fcts = [ -1 -1 ; 1 0 ; 0 1 ]' ;
 for el = 1 : n_elem
     v_elem = elem_vertices( el, : );
     
-    v1 = vertex_coordinates( v_elem(1), :)' ; % coords. del 1er vertice del elem.
-    v2 = vertex_coordinates( v_elem(2), :)' ; % coords. del 2do vertice del elem.
-    v3 = vertex_coordinates( v_elem(3), :)' ; % coords. del 3er vertice del elem.
+    v1 = vertex_coordinates( v_elem(1), :)' ; % coords. of 1st vertex of elem.
+    v2 = vertex_coordinates( v_elem(2), :)' ; % coords. of 2nd vertex of elem.
+    v3 = vertex_coordinates( v_elem(3), :)' ; % coords. of 3rd vertex of elem.
     
     m12 = (v1 + v2) / 2; % midpoint of side 1-2
     m23 = (v2 + v3) / 2; % midpoint of side 2-3
@@ -115,7 +116,7 @@ for el = 1 : n_elem
 
     % computation of the element matrix
     el_mat = coef_a * grd_bas_fcts' * (Binv*Binv') * grd_bas_fcts * el_area ...
-           + coef_c * el_area * [ 1/6 1/12 1/12 ; 1/12 1/6 1/12; 1/12 1/12 1/6];
+           + coef_c * el_area * Mhat;
   
     % contributions added to the global matrix
     A( v_elem, v_elem ) = A( v_elem, v_elem ) + el_mat;
@@ -146,7 +147,6 @@ if (neumann ~= [])
   end
 end
 
-
 % We now impose the Dirichlet boundary conditions
 % enforcing the corresponding rows of A to be  e_i
 % and the right hand side to be g_D( x_i )
@@ -159,7 +159,6 @@ end
 
 % and finally we solve for u
 uh = A \ fh;
-
 
 % at this point 'uh' contains the solution at each vertex
 % we plot it with

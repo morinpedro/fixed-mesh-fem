@@ -125,9 +125,6 @@ now `2/3` (energy) and `4/3` (`L^2`), i.e. `N_p^{-1/3}` and `N_p^{-2/3}`:
 
 ## Notes
 
-- `fem.m` uses `inline(...)` for the data functions. Octave supports it; recent
-  Matlab versions removed `inline`, so there you may replace those lines with
-  anonymous functions, e.g. `fc_f = @(x) 20*exp(-10*norm(x)^2)*(2-20*norm(x)^2);`.
 - The mesh generators write their output files into the current working
   directory, so run them from the folder where you will run `fem.m`.
 

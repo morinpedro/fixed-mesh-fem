@@ -1,5 +1,4 @@
 function gen_mesh_L_shape(N)
-
 % function gen_mesh_L_shape(N)
 %
 % generates a uniform mesh of the L-shaped domain
@@ -82,8 +81,7 @@ fclose(file);
 
 
 % This function generates files to solve problems on domains
-% with the whole boundary of  Dirichlet  type.
-
+% with the whole boundary of  Dirichlet type.
 % For that reason, the file 'dirichlet.txt' should contain
 % all the boundary vertices and  'newmann.txt'  should be empty.
 
