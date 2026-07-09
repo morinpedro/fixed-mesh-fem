@@ -24,11 +24,11 @@ coef_c = 0.0;
 
 % right-hand side function f
 %fc_f = @(x) sin(pi*x(1))*sin(pi*x(2));
-%fc_f = @(x) 2*(x(1)>0.5)','x';
-fc_f = @(x) 20*exp(-10*norm(x)^2)*(2-20*norm(x)^2);
+%fc_f = @(x) 2*(x(1)>0.5);
+% fc_f = @(x) 20*exp(-10*norm(x)^2)*(2-20*norm(x)^2);
 
 % Dirichlet data, function g_D
-fc_gD = @(x) exp(-10*norm(x)^2);
+% fc_gD = @(x) exp(-10*norm(x)^2);
 
 % Neumann data, function g_N
 fc_gN = @(x) 0;
