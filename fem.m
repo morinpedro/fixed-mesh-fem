@@ -12,27 +12,6 @@
 % neumann.txt  -> segments on the Neumann boundary Gamma_N
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%  problem  data
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% diffusion coefficient (a) of the equation
-coef_a = 1.0;
-% reaction coefficient (c) of the equation
-coef_c = 0.0;
-
-
-% right-hand side function f
-%fc_f = @(x) sin(pi*x(1))*sin(pi*x(2));
-%fc_f = @(x) 2*(x(1)>0.5);
-% fc_f = @(x) 20*exp(-10*norm(x)^2)*(2-20*norm(x)^2);
-
-% Dirichlet data, function g_D
-% fc_gD = @(x) exp(-10*norm(x)^2);
-
-% Neumann data, function g_N
-fc_gN = @(x) 0;
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  start  of  resolution
@@ -95,6 +74,7 @@ for el = 1 : n_elem
     m12 = (v1 + v2) / 2; % midpoint of side 1-2
     m23 = (v2 + v3) / 2; % midpoint of side 2-3
     m31 = (v3 + v1) / 2; % midpoint of side 3-1
+    bar = (v1+v2+v3)/3;  % barycenter of element
 
     % evaluation of f at the quadrature points
     f12 = fc_f(m12);  f23 = fc_f(m23);  f31 = fc_f(m31); 
@@ -115,8 +95,8 @@ for el = 1 : n_elem
     Binv = inv(B);
 
     % computation of the element matrix
-    el_mat = coef_a * grd_bas_fcts' * (Binv*Binv') * grd_bas_fcts * el_area ...
-           + coef_c * el_area * Mhat;
+    el_mat = coeff_a(bar) * grd_bas_fcts' * (Binv*Binv') * grd_bas_fcts * el_area ...
+           + coeff_c(bar) * el_area * Mhat;
   
     % contributions added to the global matrix
     A( v_elem, v_elem ) = A( v_elem, v_elem ) + el_mat;

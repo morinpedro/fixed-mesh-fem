@@ -59,7 +59,7 @@ gen_mesh_rectangle(16)   % uniform 16x16 mesh of the unit square -> writes the .
 fem                      % assemble, solve, and plot the P1 solution
 ```
 
-The problem data (`coef_a`, `coef_c`, and the functions `fc_f`, `fc_gD`,
+The problem data (`coeff_a`, `coeff_c`, and the functions `fc_f`, `fc_gD`,
 `fc_gN`) are set at the top of `fem.m`; edit them to change the problem. The
 default corresponds to the manufactured solution `u(x) = exp(-10|x|^2)`, for
 which `f = -Δu` and `g_D = u` are already provided.
