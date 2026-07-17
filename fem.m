@@ -43,7 +43,7 @@ end
 % end of mesh input
 
 
-% Start of matrix and right-hand side asemmbly
+% Start of makx and right-hand side asemmbly
 n_vertices = size(vertex_coordinates, 1); 
 n_elem = size(elem_vertices, 1);
 
@@ -143,3 +143,5 @@ uh = A \ fh;
 % at this point 'uh' contains the solution at each vertex
 % we plot it with
 trimesh(elem_vertices, vertex_coordinates(:,1), vertex_coordinates(:,2), uh);
+view(70,12)
+pause(0.1)

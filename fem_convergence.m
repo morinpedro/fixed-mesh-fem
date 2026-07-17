@@ -20,8 +20,8 @@ fprintf("-----------------------------------------\n");
 fprintf("  N     Np    H1err   rate   L2err   rate\n");
 fprintf("-----------------------------------------\n");
 
-for N = 2.^[2:6]
-    gen_mesh_rectangle(N);
+for N = 2.^[2:7]
+    gen_mesh_rectangle(N,N,-1,1,-1,1);
     fem
     l2 = L2_err(elem_vertices,vertex_coordinates,uh,u_ex);
     h1 = H1_err(elem_vertices,vertex_coordinates,uh,grad_u_ex);
