@@ -131,17 +131,29 @@ end
 % enforcing the corresponding rows of A to be  e_i
 % and the right hand side to be g_D( x_i )
 for i = 1:length(dirichlet)
-  diri = dirichlet(i);
-  A(diri,:) = zeros(1, n_vertices);
-  A(diri,diri) = 1;
-  fh(diri) = fc_gD( vertex_coordinates(diri, :) );
+    diri = dirichlet(i);
+    A(diri,:) = zeros(1, n_vertices);
+    A(diri,diri) = 1;
+    fh(diri) = fc_gD( vertex_coordinates(diri, :) );
 end
-
 % and finally we solve for u
 uh = A \ fh;
 
+% if we do not want to break the symmetry, 
+% we can proceed as follows, solving only for the 'free nodes'
+%
+% uh = zeros(n_vertices,1);
+% freenodes = true(n_vertices,1);
+% freenodes(dirichlet) = false;
+% for i = 1:length(dirichlet)
+%     diri = dirichlet(i);
+%     uh(diri) = fc_gD( vertex_coordinates(diri, :) );
+% end
+% uh(freenodes) = A(freenodes,freenodes) \ (fh(freenodes) - A(freenodes,dirichlet)*uh(dirichlet));
+
 % at this point 'uh' contains the solution at each vertex
 % we plot it with
-trimesh(elem_vertices, vertex_coordinates(:,1), vertex_coordinates(:,2), uh);
+% trimesh(elem_vertices, vertex_coordinates(:,1), vertex_coordinates(:,2), uh);
+trisurf(elem_vertices, vertex_coordinates(:,1), vertex_coordinates(:,2), uh);
 view(70,12)
-pause(0.1)
+pause(3)
